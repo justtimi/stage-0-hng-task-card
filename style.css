@@ -52,10 +52,9 @@ article {
   justify-content: flex-start;
   gap: 20px;
   transition: all 0.2s ease;
-  
 }
 
-article:hover{
+article:hover {
   transform: translateY(-4px);
   box-shadow: var(--box-shadow);
 }
@@ -169,6 +168,10 @@ time {
   font-size: 0.9rem;
 }
 
+.overdue {
+  color: var(--color-red);
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -219,7 +222,7 @@ input[type="checkbox"]:focus-visible {
     padding: 18px;
   }
 
-  .badges{
+  .badges {
     gap: 8px;
   }
 }
