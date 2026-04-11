@@ -35,14 +35,14 @@
           incidunt veniam commodi, magnam adipisci in qui iure pariatur enim?
         </p>
 
-        <div>
-          <span data-testid="test-todo-priority" aria-label="Priority: High">High</span>
-          <span data-testid="test-todo-status" aria-label="Status: In Progress">In Progress</span>
+        <div class="badges">
+          <span class="badge priority-high" data-testid="test-todo-priority" aria-label="Priority: High">High</span>
+          <span class="badge status-inprogress" data-testid="test-todo-status" aria-label="Status: In Progress">In Progress</span>
         </div>
         <time datetime="2026-04-16T18:00:00Z" data-testid="test-todo-due-date"
           >Due April 16, 2026</time
         >
-        <div data-testid="test-todo-time-remaining" aria-live="polite"></div>
+        <div data-testid="test-todo-time-remaining" aria-live="polite" class="time-remaining">Overdue</div>
 
         <div data-testid="test-todo-tags">
           <ul class="tags" role="list">
