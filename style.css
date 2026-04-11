@@ -157,7 +157,11 @@ p {
   color: var(--color-green);
   border-color: hsl(152, 88%, 23%);
 }
-
+.status-overdue {
+  background: hsl(329, 39%, 17%);
+  color: var(--color-red);
+  border-color: hsl(349, 58%, 30%);
+}
 time {
   font-size: 0.85rem;
   color: var(--text-muted);

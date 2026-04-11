@@ -18,48 +18,57 @@ const updateTimeRemaining = () => {
   const hours = Math.floor(difference / (1000 * 60 * 60)) % 24;
   const minutes = Math.floor(difference / (1000 * 60)) % 60;
 
-  if (checkbox && checkbox.checked) {
+  if (checkbox.checked) {
     timeRemaining.textContent = "Done";
+    timeRemaining.classList.remove("overdue");
+    statusPill.textContent = "Done";
+    statusPill.classList.remove("status-inprogress", "status-overdue");
+    statusPill.classList.add("status-done");
+    heading.classList.add("completed");
     return;
   }
+
+  heading.classList.remove("completed");
 
   if (difference <= 0) {
     timeRemaining.textContent = "Overdue";
     timeRemaining.classList.add("overdue");
+    statusPill.textContent = "Overdue";
+    statusPill.classList.remove("status-inprogress", "status-done");
+    statusPill.classList.add("status-overdue");
     return;
-  } else {
-    timeRemaining.classList.remove("overdue");
   }
+  timeRemaining.classList.remove("overdue");
+  statusPill.classList.add("status-inprogress");
+  statusPill.classList.remove("status-overdue", "status-done");
+  statusPill.textContent = "In Progress";
 
-  if (days >= 1) {
+  if (difference < 60000) {
+    timeRemaining.textContent = "Due now";
+  } else if (difference < 3600000) {
+    timeRemaining.textContent = `Due in ${minutes} minutes`;
+  } else if (days === 1) {
+    timeRemaining.textContent = "Due tomorrow";
+  } else if (days > 1) {
     timeRemaining.textContent = `Due in ${days} days, ${hours} hours, and ${minutes} minutes`;
-  } else {
+  } else if (days < 1) {
     timeRemaining.textContent = `Due in ${hours} hours, and ${minutes} minutes`;
   }
 };
 
-editButton.addEventListener("click", () => {
-  alert("Button Clicked");
-});
+if (editButton) {
+  editButton.addEventListener("click", () => {
+    alert("Button Clicked");
+  });
+}
 
-deleteButton.addEventListener("click", () => {
-  console.log("Item deleted");
-});
+if (deleteButton) {
+  deleteButton.addEventListener("click", () => {
+    console.log("Item deleted");
+  });
+}
 
-checkbox.addEventListener("change", () => {
-  if (checkbox.checked) {
-    statusPill.classList.remove("status-inprogress");
-    statusPill.classList.add("status-done");
-    heading.classList.add("completed");
-    statusPill.textContent = "Done";
-  } else {
-    statusPill.classList.add("status-inprogress");
-    statusPill.classList.remove("status-done");
-    heading.classList.remove("completed");
-    statusPill.textContent = "In Progress";
-    updateTimeRemaining();
-  }
-});
+checkbox.addEventListener("change", updateTimeRemaining);
 
 updateTimeRemaining();
 setInterval(updateTimeRemaining, 60000);
