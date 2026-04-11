@@ -161,7 +161,20 @@ const updateTimeRemaining = () => {
   heading.classList.remove("completed");
 
   if (difference <= 0) {
-    timeRemaining.textContent = "Overdue";
+    const absDifference = Math.abs(difference);
+
+    const overdueDays = Math.floor(absDifference / (1000 * 60 * 60 * 24));
+    const overdueHours = Math.floor(absDifference / (1000 * 60 * 60)) % 24;
+    const overdueMinutes = Math.floor(absDifference / (1000 * 60)) % 60;
+
+    if (overdueHours < 1 && overdueDays < 1) {
+      timeRemaining.textContent = `Overdue by ${overdueMinutes} minutes`;
+    } else if (overdueDays < 1) {
+      timeRemaining.textContent = `Overdue by ${overdueHours} hours and ${overdueMinutes} minutes`;
+    } else {
+      timeRemaining.textContent = `Overdue by ${overdueDays} days, ${overdueHours} hours, and ${overdueMinutes} minutes`;
+    }
+
     timeRemaining.classList.add("overdue");
     statusPill.textContent = "Overdue";
     statusPill.classList.remove("status-inprogress", "status-done");
