@@ -4,13 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>Todo Componnent – HNG Stage 0 Task</title>
   </head>
   <body>
     <main>
-      <article data-testid="test-todo-card">
+      <article data-testid="test-todo-card" aria-labelledby="task-title">
         <header>
-          <h2 data-testid="test-todo-title">Implement authentication system</h2>
+          <h2 data-testid="test-todo-title" id="task-title">
+            My first task for the HNG Internship
+          </h2>
 
           <div class="action-btns">
             <button
@@ -31,8 +33,8 @@
         </header>
 
         <p data-testid="test-todo-description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Et molestias
-          incidunt veniam commodi, magnam adipisci in qui iure pariatur enim?
+          HNG Stage 0 task building a responsive Todo Card using HTML, CSS, and
+          JavaScript with dynamic state and time updates.
         </p>
 
         <div class="badges">
@@ -47,6 +49,7 @@
             class="badge status-inprogress"
             data-testid="test-todo-status"
             aria-label="Status: In Progress"
+            aria-live="polite"
             >In Progress</span
           >
         </div>
@@ -57,9 +60,7 @@
           data-testid="test-todo-time-remaining"
           aria-live="polite"
           class="time-remaining"
-        >
-          Overdue
-        </div>
+        ></div>
 
         <div data-testid="test-todo-tags">
           <ul class="tags" role="list">
@@ -80,7 +81,6 @@
         </div>
       </article>
     </main>
-    <footer></footer>
     <script src="script.js"></script>
   </body>
 </html>
