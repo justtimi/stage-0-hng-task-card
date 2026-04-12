@@ -6,29 +6,41 @@ const checkbox = document.querySelector("#complete-toggle");
 const heading = document.querySelector("h2");
 const statusPill = document.querySelector("#status");
 
+const STATUS_CONFIG = {
+  done: {
+    text: "Done",
+    class: "status-done",
+    headingClass: "completed",
+  },
+  overdue: {
+    text: "Overdue",
+    class: "status-overdue",
+    headingClass: "",
+  },
+  inprogress: {
+    text: "In Progress",
+    class: "status-inprogress",
+    headingClass: "",
+  },
+};
+
+const STATUS_CLASSES = ["status-overdue", "status-inprogress", "status-done"];
+
 const updateTimeRemaining = () => {
   if (!time || !timeRemaining) return;
   const dueDateString = time.getAttribute("datetime");
-
   const dueDate = new Date(dueDateString);
   const now = new Date();
   const difference = dueDate - now;
 
+  const minutes = Math.floor((difference / (1000 * 60)) % 60);
+  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
   const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-  const hours = Math.floor(difference / (1000 * 60 * 60)) % 24;
-  const minutes = Math.floor(difference / (1000 * 60)) % 60;
 
   if (checkbox.checked) {
-    timeRemaining.textContent = "Done";
-    timeRemaining.classList.remove("overdue");
-    statusPill.textContent = "Done";
-    statusPill.classList.remove("status-inprogress", "status-overdue");
-    statusPill.classList.add("status-done");
-    heading.classList.add("completed");
+    setStatus({ type: "done", timeText: "Done" });
     return;
   }
-
-  heading.classList.remove("completed");
 
   if (difference <= 0) {
     const absDifference = Math.abs(difference);
@@ -37,35 +49,49 @@ const updateTimeRemaining = () => {
     const overdueHours = Math.floor(absDifference / (1000 * 60 * 60)) % 24;
     const overdueMinutes = Math.floor(absDifference / (1000 * 60)) % 60;
 
+    let overdueText;
     if (overdueHours < 1 && overdueDays < 1) {
-      timeRemaining.textContent = `Overdue by ${overdueMinutes} minutes`;
+      overdueText = `Overdue by ${overdueMinutes} minutes`;
     } else if (overdueDays < 1) {
-      timeRemaining.textContent = `Overdue by ${overdueHours} hours and ${overdueMinutes} minutes`;
+      overdueText = `Overdue by ${overdueHours} hours and ${overdueMinutes} minutes`;
     } else {
-      timeRemaining.textContent = `Overdue by ${overdueDays} days, ${overdueHours} hours, and ${overdueMinutes} minutes`;
+      overdueText = `Overdue by ${overdueDays} days, ${overdueHours} hours, and ${overdueMinutes} minutes`;
     }
-
-    timeRemaining.classList.add("overdue");
-    statusPill.textContent = "Overdue";
-    statusPill.classList.remove("status-inprogress", "status-done");
-    statusPill.classList.add("status-overdue");
+    setStatus({ type: "overdue", timeText: overdueText });
     return;
   }
-  timeRemaining.classList.remove("overdue");
-  statusPill.classList.add("status-inprogress");
-  statusPill.classList.remove("status-overdue", "status-done");
-  statusPill.textContent = "In Progress";
-
+  let timetext;
   if (difference < 60000) {
-    timeRemaining.textContent = "Due now";
+    timetext = "Due now";
   } else if (difference < 3600000) {
-    timeRemaining.textContent = `Due in ${minutes} minutes`;
+    timetext = `Due in ${minutes} minutes`;
   } else if (days === 1) {
-    timeRemaining.textContent = "Due tomorrow";
+    timetext = "Due tomorrow";
   } else if (days > 1) {
-    timeRemaining.textContent = `Due in ${days} days, ${hours} hours, and ${minutes} minutes`;
+    timetext = `Due in ${days} days, ${hours} hours, and ${minutes} minutes`;
   } else if (days < 1) {
-    timeRemaining.textContent = `Due in ${hours} hours, and ${minutes} minutes`;
+    timetext = `Due in ${hours} hours, and ${minutes} minutes`;
+  }
+  setStatus({ type: "inprogress", timeText: timetext });
+};
+
+const setStatus = ({ timeText, type }) => {
+  const config = STATUS_CONFIG[type];
+  if (!config) return;
+
+  if (timeText) {
+    timeRemaining.textContent = timeText;
+  }
+  statusPill.classList.remove(...STATUS_CLASSES);
+
+  statusPill.textContent = config.text;
+
+  statusPill.classList.add(config.class);
+
+  if (config.headingClass) {
+    heading.classList.add(config.headingClass);
+  } else {
+    heading.classList.remove("completed");
   }
 };
 
