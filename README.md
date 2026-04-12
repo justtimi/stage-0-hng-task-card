@@ -92,7 +92,7 @@ project-folder/
 
 ```bash
 
-git clone https://github.com/your-username/stage-0-hng-task-card.git
+git clone https://github.com/justtimi/stage-0-hng-task-card.git
 
 ```
 
@@ -214,7 +214,21 @@ My process was:
 
 I also learned that for more precise conditional checks, it is better to use the raw millisecond difference value rather than derived values like days or hours.
 
-- **UI state management without frameworks**
+- **UI state management without frameworks**: The UI is now driven by a **config-based state system**, which improves scalability and reduces repetition.
+
+Instead of hardcoding UI updates in multiple places, the app uses a centralized state configuration:
+
+```js
+const STATUS_CONFIG = {
+  done: { text: "Done", class: "status-done", headingClass: "completed" },
+  overdue: { text: "Overdue", class: "status-overdue", headingClass: "" },
+  inprogress: {
+    text: "In Progress",
+    class: "status-inprogress",
+    headingClass: "",
+  },
+};
+```
 
 - **Accessibility basics (aria-labels, semantic HTML)**:
   The project brief included specific accessibility requirements, which I implemented carefully. I learned about the aria-live attribute and how it helps announce dynamically changing content to assistive technologies. I also added support for users with motion sensitivity:
@@ -252,6 +266,31 @@ This project demonstrates my ability to:
 - Relied on semantic HTML elements such as `<article>` and `<time>` to improve structure and accessibility.
 - Used CSS variables for maintainable and scalable styling.
 - Implemented defensive null checks before manipulating DOM elements to prevent runtime errors.
+
+**NOTE**: The project was refactored to improve readability and scalability.
+
+Key improvements include:
+
+#### 1. Centralized Status System
+
+All task states (Done, Overdue, In Progress) are now defined in a single configuration object.
+
+#### 2. Reusable UI Function
+
+A `setStatus()` function was introduced to handle all UI updates consistently:
+
+- Updates status text
+- Controls CSS classes
+- Manages heading state
+- Reduces duplicate DOM manipulation logic
+
+#### 3. Class Management Optimization
+
+A shared array of status classes is used to reset UI state efficiently:
+
+```js
+const STATUS_CLASSES = ["status-overdue", "status-inprogress", "status-done"];
+```
 
 ## Future Improvements
 
